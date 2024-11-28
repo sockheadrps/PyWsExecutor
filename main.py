@@ -103,4 +103,4 @@ async def send_event(request: EventRequest):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="localhost", port=8123, reload=True)
+    uvicorn.run(app, host="localhost", port=8123)
