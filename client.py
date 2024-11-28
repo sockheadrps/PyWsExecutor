@@ -6,6 +6,12 @@ import rpaudio
 import pydirectinput
 from time import sleep
 import pyautogui
+from dotenv import load_dotenv
+import os
+
+
+
+
 
 def handle_keys(keys):
     """
@@ -88,8 +94,9 @@ def tts(text, volume):
         print(f"Error generating audio: {e}")
 
 async def main():
-    uri = "ws://tts.socksthoughtshop.lol/ws"  
-    # uri = "ws://localhost:8123/ws"  
+    load_dotenv() 
+    uri = os.getenv("WEBSOCKET_URI", "ws://localhost:8123/ws")
+    print(f"Connecting to WebSocket server at {uri}...")
     await send_and_receive_messages(uri)
 
 asyncio.run(main())
