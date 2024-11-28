@@ -116,7 +116,6 @@ form button[type="submit"]:active {
 .key {
   width: 50px;
   height: 50px;
-  background-color: #4caf50;
   color: rgb(85, 78, 78);
   text-align: center;
   line-height: 50px;
@@ -174,11 +173,18 @@ form button[type="submit"]:active {
 
 /* Individual key styles */
 .key {
+  width: 50px;
+  height: 50px;
+  color: rgb(85, 78, 78);
+  text-align: center;
+  line-height: 50px;
+  margin: 2px;
   padding: 15px;
   text-align: center;
   font-size: 12px;
   background-color: #ac9a9a;
   border: 1px solid #ccc;
+  border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.1s;
 }
@@ -309,27 +315,10 @@ form button[type="submit"]:active {
   transform: scale(0.98);
 }
 
-/* Media query for responsiveness on smaller screens */
-@media (max-width: 600px) {
-  .key-status {
-    padding: 15px;
-  }
-
-  #pressedKeys {
-    font-size: 13px;
-    padding: 12px;
-  }
-
-  #clearPressedKeysBtn {
-    font-size: 14px;
-    padding: 6px 10px;
-  }
-}
-
 @media screen and (max-width: 600px) {
   /* Adjust the form padding to make it more compact */
-  form {
-    padding: 10px;
+  body {
+    margin: 5px; /* Smaller margin for smaller screens */
   }
 
   /* Make buttons span the full width */
@@ -350,14 +339,37 @@ form button[type="submit"]:active {
     display: grid;
     gap: 1px;
     max-width: 100%; /* Ensure it doesn't overflow */
+    margin: 0; /* Remove margin for full width */
+  }
+  .center-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50%; /* Ensure full width */
+    padding: 0 10px; /* Add small padding for breathing space */
+    margin-top: 20px; /* Space from top */
+    margin: auto;
+  }
+
+  /* Make form and key-status containers responsive */
+  form,
+  .key-status {
+    max-width: 100%; /* Allow full width usage */
+    width: 100%; /* Ensure full width */
+    padding: 15px; /* Adjust padding for smaller screen */
+    margin: 10px 0; /* Small vertical margin */
   }
 
   /* Make keys smaller */
   .key {
-    width: 35px;
-    height: 35px;
-    font-size: 10px; /* Smaller font size for keys */
-    padding: 4px;
+    width: 25px;
+    height: 25px;
+    font-size: 8px; /* Smaller font size for keys */
+    padding: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   /* Special key sizes */
@@ -366,18 +378,35 @@ form button[type="submit"]:active {
   .key.enter,
   .key.tab,
   .key.capslock {
-    width: 80px;
+    width: 40px;
     font-size: 12px;
+  }
+  .large-key {
+    width: 40px;
+  }
+
+  .extra-large-key {
+    width: 60px;
   }
 
   /* Reduce the width of the space bar */
   .key.space {
-    width: 150px;
+    width: 60px;
   }
 
   /* Numpad keys */
   .key.numpadenter {
     width: 80px;
+  }
+
+  .key.ctrlleft,
+  .key.ctrlright,
+  .key.altleft,
+  .key.altright,
+  .key.winleft,
+  .key.winright,
+  .key.apps {
+    width: 40px;
   }
 
   /* Adjust the layout of rows */
@@ -390,7 +419,6 @@ form button[type="submit"]:active {
   /* Adjust the size of the pressed keys display */
   #pressedKeys {
     font-size: 12px;
-    padding: 2px;
   }
 
   input[type="text"],
