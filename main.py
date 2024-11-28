@@ -7,11 +7,9 @@ from fastapi import Request
 from pydantic import BaseModel
 import json
 
-
 app = FastAPI()
 
-# Store voices and connections
-available_voices = []
+# Store connections
 active_connections = []
 
 # Static file serving
@@ -23,8 +21,7 @@ templates = Jinja2Templates(directory="templates")
 
 # Pydantic Model for message request
 class MessageRequest(BaseModel):
-    message: str
-    voice: str 
+    message: str  # Only message, no voice anymore
 
 
 class ConnectionManager:
@@ -51,7 +48,6 @@ manager = ConnectionManager()
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
-    global available_voices
     await manager.connect(websocket)
     try:
         while True:
@@ -64,11 +60,14 @@ async def websocket_endpoint(websocket: WebSocket):
                 await manager.send_message("Error: Received invalid JSON", websocket)
                 continue
 
-            if data.get("type") == "available_voices_count":
-                available_voices = data.get("voiceCount", [])
-                print(f"Available voices received: {available_voices}")
-                await manager.broadcast(f"Available voices updated: {available_voices} voices")
-            
+            # Handle incoming message type (without voice now)
+            if data.get("type") == "send_message":
+                message = data.get("message")
+                print(f"Message: {message}")
+
+                # Broadcast the received message to all connected clients
+                await manager.broadcast(f'{{"message": "{message}"}}')
+
             else:
                 await manager.send_message(f"Server received message: {data}", websocket)
 
@@ -82,20 +81,14 @@ async def get_html_page(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-@app.get("/voices/count", response_class=JSONResponse)
-async def get_voices():
-    global available_voices
-    return JSONResponse(content={"voiceCount": available_voices})
-
-
 @app.post("/send-message")
 async def send_message(request: MessageRequest):
     try:
-        message = request.message
-        voice = request.voice  
-        print(f"Message: {message}, Selected Voice: {voice}")
+        message = request.message  # Only the message now
+        print(f"Message: {message}")
 
-        await manager.broadcast(f'{{"message": "{message}", "voice": "{voice}"}}')
+        # Broadcast the message to all connected clients
+        await manager.broadcast(f'{{"message": "{message}"}}')
 
         return JSONResponse(content={"status": "Message sent successfully"})
     except Exception as e:
