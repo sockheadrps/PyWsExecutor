@@ -19,9 +19,10 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 
-# Pydantic Model for message request
-class MessageRequest(BaseModel):
-    message: str  # Only message, no voice anymore
+# Pydantic Model for event request
+class EventRequest(BaseModel):
+    event: str  # Event name
+    data: dict  # Associated data for the event
 
 
 class ConnectionManager:
@@ -60,16 +61,17 @@ async def websocket_endpoint(websocket: WebSocket):
                 await manager.send_message("Error: Received invalid JSON", websocket)
                 continue
 
-            # Handle incoming message type (without voice now)
-            if data.get("type") == "send_message":
-                message = data.get("message")
-                print(f"Message: {message}")
+            # Handle incoming event (general structure now)
+            event = data.get("event")
+            if event:
+                event_data = data.get("data", {})
+                print(f"Event: {event}, Data: {event_data}")
 
-                # Broadcast the received message to all connected clients
-                await manager.broadcast(f'{{"message": "{message}"}}')
+                # Broadcast the event and its data to all connected clients
+                await manager.broadcast(json.dumps({"event": event, "data": event_data}))
 
             else:
-                await manager.send_message(f"Server received message: {data}", websocket)
+                await manager.send_message(f"Error: Invalid event format", websocket)
 
     except WebSocketDisconnect:
         manager.disconnect(websocket)
@@ -81,15 +83,20 @@ async def get_html_page(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-@app.post("/send-message")
-async def send_message(request: MessageRequest):
+@app.post("/send-event")
+async def send_event(request: EventRequest):
     try:
-        message = request.message  # Only the message now
-        print(f"Message: {message}")
+        event = request.event
+        data = request.data
+        
+        print(f"Event: {event}, Data: {data}")
 
-        # Broadcast the message to all connected clients
-        await manager.broadcast(f'{{"message": "{message}"}}')
+        # Broadcast the event to all connected clients
+        await manager.broadcast(json.dumps({"event": event, "data": data}))
 
-        return JSONResponse(content={"status": "Message sent successfully"})
+        return JSONResponse(content={"status": "Event sent successfully"})
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Failed to send message")
+        print(f"Error: {e}")
+        raise HTTPException(status_code=500, detail="Failed to send event")
+
+
