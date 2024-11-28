@@ -11,20 +11,16 @@ import uvicorn
 
 app = FastAPI()
 
-# Store connections
 active_connections = []
 
-# Static file serving
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Template rendering
 templates = Jinja2Templates(directory="templates")
 
 
-# Pydantic Model for event request
 class EventRequest(BaseModel):
-    event: str  # Event name
-    data: dict  # Associated data for the event
+    event: str  
+    data: dict  
 
 
 class ConnectionManager:
@@ -63,7 +59,6 @@ async def websocket_endpoint(websocket: WebSocket):
                 await manager.send_message("Error: Received invalid JSON", websocket)
                 continue
 
-            # Handle incoming event (general structure now)
             event = data.get("event")
             if event:
                 event_data = data.get("data", {})
