@@ -6,6 +6,8 @@ from typing import List
 from fastapi import Request
 from pydantic import BaseModel
 import json
+import uvicorn
+
 
 app = FastAPI()
 
@@ -100,3 +102,5 @@ async def send_event(request: EventRequest):
         raise HTTPException(status_code=500, detail="Failed to send event")
 
 
+if __name__ == "__main__":
+    uvicorn.run(app, host="localhost", port=8123, reload=True)
