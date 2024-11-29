@@ -8,35 +8,28 @@ from time import sleep
 import pyautogui
 from dotenv import load_dotenv
 import os
+from models import PressAction, ComboAction, WordAction, DelayAction, WsEvent
 
 
 def handle_keys(keys):
     for key_entry in keys:
         match key_entry:
-            case {"press": key}:
-                if key.lower() == "winleft":
-                    pyautogui.press("super")
-                else:
-                    pydirectinput.press(key.lower(), _pause=False)
-
-            case {"combo": {"hold": hold_keys, "press": press_keys}}:
+            case PressAction(press=key):
+                pydirectinput.press(key.lower())
+            case ComboAction(hold=hold_keys, press=press_keys):
                 for hold_key in hold_keys:
-                    pydirectinput.keyDown(hold_key.lower(), _pause=False)
+                    pydirectinput.keyDown(hold_key.lower())
                 for press_key in press_keys:
-                    pydirectinput.press(press_key.lower(), _pause=False)
+                    pydirectinput.press(press_key.lower())
                 for hold_key in hold_keys:
-                    pydirectinput.keyUp(hold_key.lower(), _pause=False)
-
-            case {"word": word}:
+                    pydirectinput.keyUp(hold_key.lower())
+            case WordAction(word=word):
                 pyautogui.write(word)
-
-            case {"delay": delay_time}:
+            case DelayAction(delay=delay_time):
                 sleep(float(delay_time))
-
             case _:
-                print(f"Unknown key entry format: {key_entry}")
+                print(f"Unknown key entry format in handle_keys: {key_entry}")
 
-                
 
 async def send_and_receive_messages(uri):
     while True:
@@ -46,21 +39,19 @@ async def send_and_receive_messages(uri):
                 while True:
                     response = await websocket.recv()
                     data = json.loads(response)
+                    ws_data = WsEvent(**data)
 
-                    if data.get('event') == "tts":
-                        text = data['data'].get("message")
-                        volume = data['data'].get("volume")
-                        if text is not None and volume is not None:
-                            tts(text, volume)
+                    match ws_data.event:
+                        case "tts":
+                            tts(ws_data.data.message, ws_data.data.volume)
+                        case "keypress":
+                            handle_keys(ws_data.data.keys)
 
-                    elif data.get('event') == "keypress":
-                        keys = data['data'].get("keys", [])
-                        if keys:
-                            handle_keys(keys)
             
         except (websockets.ConnectionClosedError, websockets.InvalidStatusCode):
             print("Connection failed. Retrying in 15 seconds...")
             await asyncio.sleep(15)
+
 
 def tts(text, volume):
     try:
@@ -76,7 +67,7 @@ def tts(text, volume):
 
 async def main():
     load_dotenv() 
-    uri = os.getenv("WEBSOCKET_URI", "ws://localhost:8123/ws")
+    uri = os.getenv("WEBSOCKET_URIS", "ws://localhost:8123/ws")
     await send_and_receive_messages(uri)
 
 asyncio.run(main())
