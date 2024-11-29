@@ -50,29 +50,21 @@ async def websocket_endpoint(websocket: WebSocket):
     await manager.connect(websocket)
     try:
         while True:
-            data = await websocket.receive_text()
-            print(f"Received from client: {data}")
-
             try:
-                data = json.loads(data)
+                data = await websocket.receive_json()
+                event = data.get("event")
+                if event:
+                    event_data = data.get("data", {})
+
+                    await manager.broadcast(json.dumps({"event": event, "data": event_data}))
+                else:
+                    await manager.send_message("Error: Invalid event format", websocket)
             except json.JSONDecodeError:
                 await manager.send_message("Error: Received invalid JSON", websocket)
-                continue
-
-            event = data.get("event")
-            if event:
-                event_data = data.get("data", {})
-                print(f"Event: {event}, Data: {event_data}")
-
-                # Broadcast the event and its data to all connected clients
-                await manager.broadcast(json.dumps({"event": event, "data": event_data}))
-
-            else:
-                await manager.send_message(f"Error: Invalid event format", websocket)
 
     except WebSocketDisconnect:
         manager.disconnect(websocket)
-        print("Client disconnected")
+
 
 
 @app.get("/tts", response_class=HTMLResponse)
@@ -86,14 +78,10 @@ async def send_event(request: EventRequest):
         event = request.event
         data = request.data
         
-        print(f"Event: {event}, Data: {data}")
-
-        # Broadcast the event to all connected clients
         await manager.broadcast(json.dumps({"event": event, "data": data}))
 
         return JSONResponse(content={"status": "Event sent successfully"})
     except Exception as e:
-        print(f"Error: {e}")
         raise HTTPException(status_code=500, detail="Failed to send event")
 
 

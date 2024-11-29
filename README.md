@@ -52,3 +52,47 @@ This project is a WebSocket front-end interface, server, and remote client for s
     }
 }
 ```
+
+Running with Windows task scheduler:
+
+<details>
+  <summary>Click to expand</summary>
+  
+```
+hit win+r or super+r
+```
+and type
+
+```
+taskschd.msc
+```
+into the run prompt.
+
+
+![into the run prompt.](assets/1.png)
+
+Name the task, adjust these settings as you see fit.
+
+![](assets/2.png)
+
+
+Go to the settings tab to handle task lifecycle.
+
+![](assets/3.png)
+
+
+Go to actions tab, click new, and locate the installed version of python.
+![](assets/4.png)
+
+Use pythonw.exe for headless. Arguements will be where the python WS client is.
+
+![](assets/5.png)
+
+Finally head to triggers, dicate when the script should be triggered to start.
+
+![](assets/6.png)
+
+
+</details>
+
+

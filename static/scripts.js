@@ -186,14 +186,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   shortcutsTab.addEventListener("click", function () {
     shortcutview = document.querySelector(".shortcut-view");
-    // if (shortcutview) {
-    //   shortcutview.remove();
-    // }
-    // let shortcutsContainer = document.getElementById("shortcutsContainer");
-    // if (shortcutsContainer) {
-    //   shortcutsContainer.style.display = "block";
-    // }
-    // Input container for entering key sequences
     const inputContainer = document.createElement("div");
     inputContainer.classList.add("input-container");
 
@@ -209,14 +201,6 @@ document.addEventListener("DOMContentLoaded", function () {
     keyStatusContent.classList.remove("active");
     formContent.classList.remove("active");
   });
-
-  // document.querySelectorAll(".tab-button").forEach((button) => {
-  //   button.addEventListener("click", function () {
-  //     const shortcutView = document.querySelector(".shortcut-view");
-  //     shortcutView.style.display = "none";
-
-  //   });
-  // });
 
   let comboState = "press";
   let comboKeys = { hold: [], press: [] };

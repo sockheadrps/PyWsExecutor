@@ -11,13 +11,9 @@ import os
 
 
 def handle_keys(keys):
-    """
-    Processes the `keys` array, handling both single key presses and combos.
-    """
     for key_entry in keys:
         match key_entry:
             case {"press": key}:
-                print(f"Pressing key: {key.lower()}")
                 if key.lower() == "winleft":
                     pyautogui.press("super")
                 else:
@@ -43,19 +39,12 @@ def handle_keys(keys):
                 
 
 async def send_and_receive_messages(uri):
-    """
-    Connects to the WebSocket server, sends a message, and listens for responses.
-    If the connection is lost, it will attempt to reconnect indefinitely.
-    """
     while True:
         try:
             async with websockets.connect(uri) as websocket:
                 print("Connected to WebSocket server.")
                 while True:
                     response = await websocket.recv()
-                    print("Received from server:", response)
-
-                    # Parse the incoming JSON message
                     data = json.loads(response)
 
                     if data.get('event') == "tts":
@@ -64,7 +53,6 @@ async def send_and_receive_messages(uri):
                         if text is not None and volume is not None:
                             tts(text, volume)
 
-                    # Handle keypress events
                     elif data.get('event') == "keypress":
                         keys = data['data'].get("keys", [])
                         if keys:
@@ -75,14 +63,10 @@ async def send_and_receive_messages(uri):
             await asyncio.sleep(15)
 
 def tts(text, volume):
-    """
-    Converts the provided text to speech and saves it as an MP3 file.
-    """
     try:
         tts = gTTS(text)
         filename = f"tts_output.mp3" 
         tts.save(filename)
-        print(f"Audio saved as {filename}")
         sound = rpaudio.AudioSink().load_audio(filename)
         volume = float(volume)
         sound.set_volume(volume)
@@ -92,8 +76,7 @@ def tts(text, volume):
 
 async def main():
     load_dotenv() 
-    uri = os.getenv("WEBSOCKET_URIs", "ws://localhost:8123/ws")
-    print(f"Connecting to WebSocket server at {uri}...")
+    uri = os.getenv("WEBSOCKET_URI", "ws://localhost:8123/ws")
     await send_and_receive_messages(uri)
 
 asyncio.run(main())
