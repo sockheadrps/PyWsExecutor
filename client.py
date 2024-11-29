@@ -10,39 +10,36 @@ from dotenv import load_dotenv
 import os
 
 
-
-
-
 def handle_keys(keys):
     """
     Processes the `keys` array, handling both single key presses and combos.
     """
     for key_entry in keys:
-        if "press" in key_entry:
-            key = key_entry["press"].lower()
-            pydirectinput.press(key, _pause=False)
+        match key_entry:
+            case {"press": key}:
+                print(f"Pressing key: {key.lower()}")
+                if key.lower() == "winleft":
+                    pyautogui.press("super")
+                else:
+                    pydirectinput.press(key.lower(), _pause=False)
 
-        elif "combo" in key_entry:
-            combo = key_entry["combo"]
-            hold_keys = combo.get("hold", [])
-            press_keys = combo.get("press", [])
+            case {"combo": {"hold": hold_keys, "press": press_keys}}:
+                for hold_key in hold_keys:
+                    pydirectinput.keyDown(hold_key.lower(), _pause=False)
+                for press_key in press_keys:
+                    pydirectinput.press(press_key.lower(), _pause=False)
+                for hold_key in hold_keys:
+                    pydirectinput.keyUp(hold_key.lower(), _pause=False)
 
-            for hold_key in hold_keys:
-                pydirectinput.keyDown(hold_key.lower(), _pause=False)
+            case {"word": word}:
+                pyautogui.write(word)
 
-            for press_key in press_keys:
-                pydirectinput.press(press_key.lower(), _pause=False)
+            case {"delay": delay_time}:
+                sleep(float(delay_time))
 
-            for hold_key in hold_keys:
-                pydirectinput.keyUp(hold_key.lower(), _pause=False)
+            case _:
+                print(f"Unknown key entry format: {key_entry}")
 
-        elif "word" in key_entry:
-            word = key_entry["word"]
-            pyautogui.write(word)
-        
-        elif "delay" in key_entry:
-            delay_time = float(key_entry["delay"])  
-            sleep(delay_time)
                 
 
 async def send_and_receive_messages(uri):
@@ -95,7 +92,7 @@ def tts(text, volume):
 
 async def main():
     load_dotenv() 
-    uri = os.getenv("WEBSOCKET_URI", "ws://localhost:8123/ws")
+    uri = os.getenv("WEBSOCKET_URIs", "ws://localhost:8123/ws")
     print(f"Connecting to WebSocket server at {uri}...")
     await send_and_receive_messages(uri)
 

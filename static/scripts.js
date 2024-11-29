@@ -10,6 +10,214 @@ document.addEventListener("DOMContentLoaded", function () {
   const wordInput = document.getElementById("wordInput"); // Word input field
   const addWordButton = document.getElementById("addWordButton"); // Word button
 
+  const keyStatusTab = document.getElementById("keyStatusTab");
+  const formTab = document.getElementById("formTab");
+  const shortcutsTab = document.getElementById("shortcutsTab"); // New Shortcuts tab
+  const keyStatusContent = document.getElementById("keyStatusContent");
+  const formContent = document.getElementById("formContent");
+  const shortcutsContent = document.getElementById("shortcutsContent"); // Shortcuts content section
+  const shortcutsContainer = document.getElementById("shortcutsContainer"); // Shortcuts container
+
+  // Activate Key Status tab by default
+  keyStatusTab.classList.add("active");
+  keyStatusContent.classList.add("active");
+
+  let shortcuts = [
+    {
+      name: "open-website",
+      keys: [
+        { press: "winleft" },
+        { word: "opera" },
+        { press: "Enter" },
+        { delay: "1" },
+        { word: "" }, // Empty value
+        { press: "Enter" },
+      ],
+    },
+    {
+      name: "close-window",
+      keys: [{ combo: { hold: ["Ctrl"], press: ["f4"] } }],
+    },
+  ];
+
+  shortcuts.forEach((shortcut) => {
+    const shortcutElement = document.createElement("button");
+    shortcutElement.classList.add("shortcut");
+    shortcutElement.textContent = shortcut.name;
+    shortcutsContainer.appendChild(shortcutElement);
+  });
+
+  document.querySelectorAll(".shortcut").forEach((shortcut) => {
+    shortcut.addEventListener("click", function () {
+      // Hide shortcuts container
+      shortcutsContainer.style.display = "none";
+
+      // Create shortcut view container
+      const shortCutView = document.createElement("div");
+      shortCutView.classList.add("shortcut-view");
+      shortcutsContent.appendChild(shortCutView);
+
+      // Get shortcut data
+      const shortcutName = this.textContent;
+      const shortcutData = shortcuts.find((s) => s.name === shortcutName);
+      console.log("Shortcut data:", shortcutData);
+      console.log("Shortcut name:", shortcutName);
+
+      if (shortcutData) {
+        const jsonValuesContainer = document.createElement("div");
+        jsonValuesContainer.classList.add("json-values-container");
+        shortCutView.appendChild(jsonValuesContainer);
+
+        shortcutData.keys.forEach((key, position) => {
+          const keyValue = Object.values(key)[0];
+          const keyName = Object.keys(key)[0];
+
+          if (keyValue === "") {
+            // Handle empty keys
+            console.log("EMPTY KEY FOUND", key);
+            console.log("Position is", position);
+
+            // Input container for entering key sequences
+            const inputContainer = document.createElement("div");
+            inputContainer.classList.add("input-container");
+
+            const keyTextBox = document.createElement("input");
+            keyTextBox.placeholder = "Enter sequence";
+
+            const setButton = document.createElement("button");
+            setButton.textContent = "Set";
+
+            // Set button functionality
+            setButton.addEventListener("click", function () {
+              const value = keyTextBox.value.trim();
+              if (!value) {
+                alert("Please enter a valid key sequence.");
+                return;
+              }
+
+              // Update the shortcutData key
+              shortcutData.keys[position][keyName] = value;
+              console.log("Updated shortcutData:", shortcutData);
+
+              // Update the button text in the UI
+              const selectedButton = jsonValuesContainer.querySelector(
+                ".shortcut-key.selected"
+              );
+              if (selectedButton) {
+                selectedButton.textContent = value;
+              }
+
+              // Clear the input box
+              keyTextBox.value = "";
+            });
+
+            inputContainer.append(keyTextBox, setButton);
+            shortCutView.appendChild(inputContainer);
+          } else {
+            // Display existing keys
+            console.log("KEY FOUND", keyValue);
+          }
+
+          // Add button for each key
+          const keyButton = document.createElement("button");
+          keyButton.classList.add("shortcut-key");
+          if (typeof keyValue == "object") {
+            keyButton.textContent = JSON.stringify(keyValue) || "";
+          } else {
+            keyButton.textContent = keyValue || "";
+          }
+          jsonValuesContainer.appendChild(keyButton);
+
+          keyButton.addEventListener("click", function () {
+            jsonValuesContainer
+              .querySelectorAll(".shortcut-key")
+              .forEach((btn) => btn.classList.remove("selected"));
+            keyButton.classList.add("selected");
+          });
+        });
+
+        // Add "Send" button
+        const sendButton = document.createElement("button");
+        sendButton.textContent = "Send";
+        shortCutView.appendChild(sendButton);
+
+        sendButton.addEventListener("click", function () {
+          const payload = {
+            event: "keypress",
+            data: { keys: [...shortcutData.keys] },
+          };
+          console.log("Sending payload:", payload);
+
+          fetch("/send-event", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("Keys sent successfully:", data.status);
+            })
+            .catch((error) => {
+              console.error("Error sending keys:", error);
+            });
+        });
+      }
+    });
+  });
+
+  // Tab switching functionality
+  keyStatusTab.addEventListener("click", function () {
+    keyStatusTab.classList.add("active");
+    formTab.classList.remove("active");
+    shortcutsTab.classList.remove("active"); // Deselect Shortcuts tab
+    keyStatusContent.classList.add("active");
+    formContent.classList.remove("active");
+    shortcutsContent.classList.remove("active"); // Hide Shortcuts content
+  });
+
+  formTab.addEventListener("click", function () {
+    formTab.classList.add("active");
+    keyStatusTab.classList.remove("active");
+    shortcutsTab.classList.remove("active"); // Deselect Shortcuts tab
+    formContent.classList.add("active");
+    keyStatusContent.classList.remove("active");
+    shortcutsContent.classList.remove("active"); // Hide Shortcuts content
+  });
+
+  shortcutsTab.addEventListener("click", function () {
+    shortcutview = document.querySelector(".shortcut-view");
+    // if (shortcutview) {
+    //   shortcutview.remove();
+    // }
+    // let shortcutsContainer = document.getElementById("shortcutsContainer");
+    // if (shortcutsContainer) {
+    //   shortcutsContainer.style.display = "block";
+    // }
+    // Input container for entering key sequences
+    const inputContainer = document.createElement("div");
+    inputContainer.classList.add("input-container");
+
+    const keyTextBox = document.createElement("input");
+    keyTextBox.placeholder = "Enter sequence";
+
+    const setButton = document.createElement("button");
+    setButton.textContent = "Set";
+    shortcutsTab.classList.add("active");
+    keyStatusTab.classList.remove("active");
+    formTab.classList.remove("active");
+    shortcutsContent.classList.add("active");
+    keyStatusContent.classList.remove("active");
+    formContent.classList.remove("active");
+  });
+
+  // document.querySelectorAll(".tab-button").forEach((button) => {
+  //   button.addEventListener("click", function () {
+  //     const shortcutView = document.querySelector(".shortcut-view");
+  //     shortcutView.style.display = "none";
+
+  //   });
+  // });
+
   let comboState = "press";
   let comboKeys = { hold: [], press: [] };
 
@@ -225,4 +433,34 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("volume").addEventListener("input", function () {
     document.getElementById("volumeValue").textContent = this.value;
   });
+  var RangeSlider = (function () {
+    var elRangeInputs = document.querySelectorAll(".range");
+
+    function setProgress(elTarget) {
+      var elRangeBar = elTarget.parentElement;
+      var intThumbWidth = elRangeBar.clientHeight * 3;
+      var intRangeBarWidth = elRangeBar.clientWidth - intThumbWidth;
+      var intThumbWidthOffset = intThumbWidth / 2;
+
+      var intProgressPosition =
+        (elTarget.value - elTarget.min) / (elTarget.max - elTarget.min);
+      var intRangePosition =
+        intRangeBarWidth * intProgressPosition + intThumbWidthOffset;
+
+      elRangeBar.style.background =
+        "linear-gradient(to right, #423089 " +
+        intRangePosition +
+        "px, #e2e2ea " +
+        intRangePosition +
+        "px";
+    }
+
+    for (var i = 0; i < elRangeInputs.length; i++) {
+      elRangeInputs[i].firstElementChild.addEventListener("input", function () {
+        setProgress(this);
+      });
+
+      setProgress(elRangeInputs[i].firstElementChild);
+    }
+  })();
 });

@@ -17,7 +17,7 @@ h3 {
 }
 
 button {
-  background-color: #007bff;
+  background-color: #294f77c9;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -38,14 +38,13 @@ button:active {
 }
 
 form {
-  background-color: #f8f9fa; /* Light background */
-  padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  max-width: 400px; /* Limit the width */
-  margin: 10px auto; /* Center align */
+  max-width: 500px; /* Limit the width */
   text-align: center;
   font-family: Arial, sans-serif;
+  height: 100%;
+  padding: 25px;
 }
 
 form h3 {
@@ -61,8 +60,7 @@ label {
   font-weight: bold;
 }
 
-input[type="text"],
-input[type="range"] {
+input[type="text"] {
   width: 90%;
   padding: 10px;
   margin-bottom: 15px;
@@ -71,24 +69,18 @@ input[type="range"] {
   font-size: 14px; /* Ensure consistency */
 }
 
-input[type="range"] {
-  width: 80%;
-  margin: 0 auto;
-}
-
 #volumeValue {
   font-weight: bold;
   color: #495057; /* Align text color with the theme */
 }
 form button[type="submit"] {
-  background-color: #007bff; /* Matches other buttons */
-  color: white;
-  border: none;
-  padding: 10px 20px;
+  padding: 8px 12px;
   font-size: 16px;
   cursor: pointer;
+  border: none;
   border-radius: 5px;
-  transition: background-color 0.3s ease, transform 0.1s;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  background-color: #294f77c9;
 }
 
 form button[type="submit"]:hover {
@@ -203,10 +195,6 @@ form button[type="submit"]:active {
   cursor: pointer;
 }
 
-#pressedKeys button:hover {
-  background-color: #c82333;
-}
-
 /* Specific adjustments for each key's size */
 .key.shiftleft,
 .key.shiftright {
@@ -238,28 +226,35 @@ form button[type="submit"]:active {
 }
 /* Container for the key status display */
 .key-status {
-  background-color: #f8f9fa; /* Light background */
-  padding: 20px;
+  padding: 25px;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   max-width: 400px; /* Limit the width */
-  margin: 0 auto; /* Center align */
   text-align: center;
   font-family: Arial, sans-serif;
+  height: 100%;
+}
+
+.shortcuts {
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  max-width: 400px; /* Limit the width */
+  text-align: center;
+  font-family: Arial, sans-serif;
+  height: 100%;
 }
 
 .key-status h3 {
   font-size: 18px;
   color: #495057; /* Dark gray */
-  margin-bottom: 10px;
   font-weight: 600;
 }
 
 #pressedKeys {
   width: 90%;
   min-height: 40px; /* Maintain height to prevent layout shift */
-  background-color: #ffffff; /* White background for uniformity */
-  border: 2px solid #ddd;
+  border: 2px solid #dddddd1e;
   padding: 15px;
   font-size: 14px;
   color: #6c757d;
@@ -270,6 +265,25 @@ form button[type="submit"]:active {
   min-height: 40px; /* Maintain height to prevent layout shift */
   max-height: 100px; /* Optional, prevent too large expansion */
   overflow-y: auto; /* Add scroll if content overflows */
+}
+
+#message {
+  background: #0057b34d;
+  width: 90%;
+  min-height: 40px; /* Maintain height to prevent layout shift */
+  border: 2px solid #dddddd1e;
+  padding: 15px;
+  font-size: 14px;
+  color: #6c757d;
+  border-radius: 5px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  min-height: 40px; /* Maintain height to prevent layout shift */
+  max-height: 100px; /* Optional, prevent too large expansion */
+  overflow-y: auto; /* Add scroll if content overflows */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  background-color: #294f7733;
 }
 
 .button-container {
@@ -287,15 +301,75 @@ form button[type="submit"]:active {
   border: none;
   border-radius: 5px;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  background-color: #294f77c9;
+}
+.modContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.delayContainer {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+  height: 25px;
+}
+
+.delayContainer button {
+  background-color: #294f77c9;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+}
+
+.delayContainer input {
+  width: 100%;
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ced4da;
+}
+
+.wordContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+  margin-top: auto;
+}
+
+.wordContainer button {
+  background-color: #294f77c9;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.wordContainer input {
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ced4da;
+  margin: auto;
 }
 
 #clearPressedKeysBtn {
-  background-color: #dc3545;
+  background-color: #294f77c9;
+
   color: white;
 }
 
 #clearPressedKeysBtn:hover {
-  background-color: #c82333;
+  background-color: #0056b3;
 }
 
 #clearPressedKeysBtn:active {
@@ -303,7 +377,6 @@ form button[type="submit"]:active {
 }
 
 #sendKeysButton {
-  background-color: #007bff;
   color: white;
 }
 
@@ -315,6 +388,82 @@ form button[type="submit"]:active {
   transform: scale(0.98);
 }
 
+.center-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  margin-top: 20px;
+  margin: auto;
+}
+
+.wraper-container {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.281); /* Add a soft shadow for a card-like effect */
+}
+
+.tab-navigation {
+  display: flex;
+  border-bottom: 4px solid #383e44; /* Add a bottom border to indicate active tab */
+  padding: 0 auto;
+  margin: 0 auto;
+}
+
+.tab-button {
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px 5px 0 0; /* Rounded top corners */
+  color: white;
+  padding: 0 auto;
+  margin: 2px;
+  background-color: #38587c94;
+  border: 1px solid #0e112560;
+  transition: background-color 0.3s, transform 0.2s ease-in-out; /* Smooth background and transform */
+}
+
+.tab-button:hover {
+  background-color: #0056b3; /* Change color on hover */
+  transform: scale(1.05); /* Slight zoom effect */
+}
+
+.tab-button.active {
+  background-color: #007bff77;
+
+  color: white; /* White text for active tab */
+}
+
+.tab-content {
+  display: none;
+  padding: 0px 15px;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out; /* Smooth transition */
+}
+
+.tab-content.active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.5s ease-in-out; /* Fade-in effect when tab becomes active */
+}
+
+/* Optional: Fade-in animation for tab content */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.key-status,
+#messageForm {
+  border-radius: 8px;
+}
+
+
+
 @media screen and (max-width: 600px) {
   /* Adjust the form padding to make it more compact */
   body {
@@ -323,13 +472,34 @@ form button[type="submit"]:active {
 
   /* Make buttons span the full width */
   button {
-    width: 100%;
     font-size: 12px; /* Smaller font size for buttons */
   }
+  .tab-button {
+    font-size: 10px; /* Adjust font size */
+  }
 
+  .tab-content {
+    height: auto; /* Allow content to adjust height */
+  }
+
+  #comboToggleButton {
+    font-size: 12px; /* Adjust font size */
+    margin: 0;
+    padding: 0;
+  }
+
+  #clearPressedKeysBtn {
+    font-size: 12px; /* Adjust font size */
+    margin: 0;
+    padding: 0;
+  }
+  #sendKeysButton {
+    font-size: 12px; /* Adjust font size */
+    margin: 0;
+    padding: 0;
+  }
   /* Inputs and range sliders span full width */
-  input[type="text"],
-  input[type="range"] {
+  input[type="text"] {
     width: 100%;
     font-size: 14px; /* Adjust font size of text inputs and range sliders */
   }
@@ -426,8 +596,224 @@ form button[type="submit"]:active {
     width: 90%;
     padding: 8px;
     margin-bottom: 15px;
-    border: 1px solid #ced4da;
     border-radius: 5px;
     font-size: 14px;
   }
+}
+
+/* Style the input container to make sure it's visible */
+.input-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  justify-content: center;
+  padding: 25px;
+}
+
+.input-container input {
+  margin-bottom: 10px;
+  padding: 5px;
+  font-size: 14px;
+}
+
+.input-container button {
+  padding: 5px 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.input-container button:hover {
+  background-color: #45a049;
+}
+
+#shortcutsContainer {
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  max-width: 400px; /* Limit the width */
+  text-align: center;
+  font-family: Arial, sans-serif;
+  height: 100%;
+}
+
+.shortcut-view {
+  background-color: #f8f9fa; /* Light background */
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  max-width: 500px; /* Limit the width */
+  text-align: center;
+  font-family: Arial, sans-serif;
+  height: 100%;
+  padding: 25px;
+  width: 100%;
+}
+
+.shortcut-key {
+  width: 100%;
+  height: 35px;
+  color: rgb(85, 78, 78);
+  text-align: center;
+  margin: 2px;
+  text-align: center;
+  font-size: 12px;
+  background-color: #ac9a9a;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.1s;
+}
+
+.shortcut-key.selected {
+  background-color: #007bff; /* Change to desired highlight color */
+  color: white;
+  border: 2px solid #0056b3; /* Optional border styling */
+}
+
+.range {
+  --track-height: 10px;
+  --track-color-fill: #423089;
+  --track-color-background: #333336;
+
+  width: 300px; /* Adjust as needed */
+  margin: 0 auto; /* Center horizontally */
+  position: relative;
+}
+
+.range [type="range"] {
+  appearance: none;
+  background: transparent;
+  width: 100%;
+  height: var(--track-height);
+  position: relative;
+  cursor: pointer;
+}
+
+/* Track styles */
+.range [type="range"]::-webkit-slider-runnable-track,
+.range [type="range"]::-moz-range-track {
+  background: linear-gradient(
+    to left,
+    var(--track-color-background) 100%,
+    var(--track-color-fill) 0%
+  );
+  height: var(--track-height);
+  border: none;
+  border-radius: 20px;
+}
+
+/* Thumb styles - completely hidden */
+.range [type="range"]::-webkit-slider-thumb,
+.range [type="range"]::-moz-range-thumb,
+.range [type="range"]::-ms-thumb {
+  display: none;
+}
+
+/* For better accessibility (focus outline removed) */
+.range [type="range"]:focus {
+  outline: none;
+}
+input[type="range"] {
+  -webkit-appearance: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  background: rgb(34, 32, 32);
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+}
+
+
+
+/* Input Styles */
+#message {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  outline: none;
+}
+
+#message:focus {
+  border-color: #423089;
+  box-shadow: 0 0 4px rgba(66, 48, 137, 0.5);
+}
+
+/* Range Slider Container */
+.range-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 15px;
+}
+
+.range-container label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Slider Styles */
+.range {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+
+.range input[type="range"]:focus {
+  outline: none;
+}
+
+.range input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 0;
+  height: 0;
+  border: none;
+}
+
+/* Value Display */
+#volumeValue {
+  font-size: 14px;
+  font-weight: bold;
+  color: #423089;
+}
+
+/* Button Styles */
+.button-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.ttsSend {
+  background: #423089;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.ttsSend:hover {
+  background-color: #6154a1;
+}
+/* Value Display */
+#volumeValue {
+  font-size: 14px;
+  font-weight: bold;
+  color: #857ab3;
+  width: 2.5ch; /* Space for up to 3 characters */
+  text-align: center; /* Center-align the text within the fixed width */
+  display: inline-block; /* Ensure it's treated as a block for width control */
 }

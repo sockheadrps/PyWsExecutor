@@ -112,49 +112,86 @@
     <div class="keyboard">
       <!-- Keyboard content here -->
     </div>
-    
-    <div class="center-wrapper">
-      <!-- Key Status Section -->
-      <div class="key-status">
-        <div id="pressedKeys">No keys pressed yet.</div>
-        <div class="button-container">
-          <button id="comboToggleButton">Combo Hold</button>
-          <button id="clearPressedKeysBtn">⬅️</button>
-          <button id="sendKeysButton">Send Keys</button>
-        </div>
-        <input
-          type="number"
-          id="delayInput"
-          step="0.1"
-          min="0"
-          placeholder="Delay (seconds)"
-        />
-        <button id="addDelayButton">Add Delay</button>
-        <input type="text" id="wordInput" placeholder="Enter a word" />
-        <button id="addWordButton">Add Word</button>
-      </div>
-    
-      <!-- Form Section -->
-      <form id="messageForm">
-        <input type="text" id="message" name="message" placeholder="tts..." required />
-    
-        <label for="volume">Volume:</label>
-        <input
-          type="range"
-          id="volume"
-          name="volume"
-          min="0.01"
-          max="1"
-          step="0.01"
-          value="1"
-        />
-        <span id="volumeValue">1</span>
-    
-        <button type="submit">Send</button>
-      </form>
-    </div>
-    
 
+    <div class="center-wrapper">
+      <div class="wraper-container">
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+          <button class="tab-button" id="keyStatusTab">Key Status</button>
+          <button class="tab-button" id="formTab">Form</button>
+          <button class="tab-button" id="shortcutsTab">ShortCuts</button>
+        </div>
+
+        <!-- Key Status Section -->
+        <div class="tab-content" id="keyStatusContent">
+          <div class="key-status">
+            <div id="pressedKeys">No keys pressed yet.</div>
+            <div class="button-container">
+              <button id="comboToggleButton">Combo Hold</button>
+              <button id="clearPressedKeysBtn">⬅️</button>
+              <button id="sendKeysButton">Send Keys</button>
+            </div>
+            <div class="modContainer">
+              <div class="delayContainer">
+                <input
+                  type="number"
+                  id="delayInput"
+                  step="0.1"
+                  min="0"
+                  placeholder="Delay (seconds)"
+                />
+                <button id="addDelayButton">↩️</button>
+              </div>
+              <div class="wordContainer">
+                <input type="text" id="wordInput" placeholder="Enter a word" />
+                <button id="addWordButton">↩️</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Section -->
+        <!-- Form Section -->
+        <div class="tab-content" id="formContent">
+          <form id="messageForm">
+            <input
+              type="text"
+              id="message"
+              name="message"
+              placeholder="Enter text..."
+              required
+            />
+
+            <div class="range-container">
+              <label for="volume">Volume</label>
+              <div class="range">
+                <input
+                  type="range"
+                  id="volume"
+                  name="volume"
+                  min="0.01"
+                  max="1"
+                  step="0.01"
+                  value="0.5"
+                />
+              </div>
+              <span id="volumeValue">0.5</span>
+            </div>
+
+            <div class="button-container">
+              <button type="submit" class="ttsSend">Send</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Shortcuts Section -->
+        <div class="tab-content" id="shortcutsContent">
+          <div id="shortcutsContainer">
+            <!-- Shortcuts will be dynamically populated here -->
+          </div>
+        </div>
+      </div>
+    </div>
     <script src="/static/scripts.js"></script>
   </body>
 </html>
