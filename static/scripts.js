@@ -35,8 +35,12 @@ document.addEventListener("DOMContentLoaded", function () {
       ],
     },
     {
-      name: "close-window",
+      name: "close-tab",
       keys: [{ combo: { hold: ["Ctrl"], press: ["f4"] } }],
+    },
+    {
+      name: "close-window",
+      keys: [{ combo: { hold: ["Alt"], press: ["f4"] } }],
     },
   ];
 

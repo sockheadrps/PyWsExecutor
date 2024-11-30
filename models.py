@@ -1,28 +1,18 @@
-from pydantic import BaseModel, field_validator, model_validator
+from pydantic import BaseModel, field_validator, model_validator, Field
 from typing import List, Union
+import json
+import logging
 
-
-class TTSData(BaseModel):
-    message: str
-    volume: float
-
-    @field_validator("volume")
-    def convert_volume_to_float(cls, value):
-        if isinstance(value, str):  
-            try:
-                return float(value)  
-            except ValueError:
-                raise ValueError(f"Invalid volume value: {value}. It must be a number.")
-        return value  
-    
+logging.basicConfig(level=logging.INFO, filename="models.log", filemode="a", format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+logger = logging.getLogger(__name__)
 
 class PressAction(BaseModel):
     press: str
 
 
 class ComboAction(BaseModel):
-    hold: list[str]  
-    press: list[str] 
+    hold: list[str] = Field(..., title="The list of keys to be held down while the seqyence of 'press' is executed", min_length=0)
+    press: list[str] = Field(..., title="The list of keys to be pressed", min_length=1)
 
 
 class WordAction(BaseModel):
@@ -33,12 +23,22 @@ class DelayAction(BaseModel):
     delay: str
 
 
-class ActionList(BaseModel):
-    keys: List[Union[PressAction, ComboAction, WordAction, DelayAction]]
-
-
 class EventData(BaseModel):
-    keys: List[Union[PressAction, ComboAction, WordAction, DelayAction]]
+    keys: List[Union[PressAction, ComboAction, WordAction, DelayAction]] = Field(..., title="The list of actions to be performed", min_length=1)
+
+ 
+class TTSData(BaseModel):
+    message: str = Field(..., title="The message to be converted to speech")
+    volume: float = Field(..., title="The volume of the audio TTS to be played", ge=0.0, le=1.0)
+
+    @field_validator("volume")
+    def convert_volume_to_float(cls, value):
+        if isinstance(value, str):  
+            try:
+                return float(value)  
+            except ValueError:
+                raise ValueError(f"Invalid volume value: {value}. It must be a number.")
+        return value  
 
 
 class WsEvent(BaseModel):
@@ -47,8 +47,13 @@ class WsEvent(BaseModel):
 
     @model_validator(mode="before")
     def process_combo_actions(cls, values):
-        keys = values.get('data', {}).get('keys', [])
+        if values.get('event') == "tts":
+            ttsdata = TTSData.model_validate(values['data'])
+            if not isinstance(ttsdata, TTSData):
+                raise ValueError("Invalid data format for 'tts' event. Expected TTSData.")
+            return values
         
+        keys = values.get('data', {}).get('keys', [])
         for i, key in enumerate(keys):
             if "combo" in key:
                 try:

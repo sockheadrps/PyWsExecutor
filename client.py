@@ -35,7 +35,6 @@ async def send_and_receive_messages(uri):
     while True:
         try:
             async with websockets.connect(uri) as websocket:
-                print("Connected to WebSocket server.")
                 while True:
                     response = await websocket.recv()
                     data = json.loads(response)
