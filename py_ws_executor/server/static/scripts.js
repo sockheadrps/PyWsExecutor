@@ -38,6 +38,10 @@ document.addEventListener("DOMContentLoaded", function () {
       name: "close-window",
       keys: [{ combo: { hold: ["Ctrl"], press: ["f4"] } }],
     },
+    {
+      name: "screenshot",
+      keys: [],
+    },
   ];
 
   shortcuts.forEach((shortcut) => {
@@ -49,19 +53,48 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.querySelectorAll(".shortcut").forEach((shortcut) => {
     shortcut.addEventListener("click", function () {
+      const shortcutName = this.textContent;
+      const shortcutData = shortcuts.find((s) => s.name === shortcutName);
+
+      if (shortcutName === "screenshot") {
+        const payload = {
+          event: "screenshot",
+          data: {}
+        };
+        
+        try {
+          console.log(payload);
+
+          fetch("/send-event", {
+            method: "POST", 
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("Keys sent successfully: " + data.status);
+            })
+            .catch((error) => {
+              console.log("Error sending keys:", error);
+            });
+
+          clearAll();
+          updatePressedKeysDisplay();
+        } catch (error) {
+          console.log("Error sending combo keys:", error);
+        }
+        return;
+      }
+
       // Hide shortcuts container
       shortcutsContainer.style.display = "none";
 
-      // Create shortcut view container
+      // Create shortcut view container  
       const shortCutView = document.createElement("div");
       shortCutView.classList.add("shortcut-view");
       shortcutsContent.appendChild(shortCutView);
-
-      // Get shortcut data
-      const shortcutName = this.textContent;
-      const shortcutData = shortcuts.find((s) => s.name === shortcutName);
-      console.log("Shortcut data:", shortcutData);
-      console.log("Shortcut name:", shortcutName);
 
       if (shortcutData) {
         const jsonValuesContainer = document.createElement("div");
@@ -185,21 +218,13 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   shortcutsTab.addEventListener("click", function () {
-    shortcutview = document.querySelector(".shortcut-view");
-    const inputContainer = document.createElement("div");
-    inputContainer.classList.add("input-container");
-
-    const keyTextBox = document.createElement("input");
-    keyTextBox.placeholder = "Enter sequence";
-
-    const setButton = document.createElement("button");
-    setButton.textContent = "Set";
     shortcutsTab.classList.add("active");
     keyStatusTab.classList.remove("active");
     formTab.classList.remove("active");
     shortcutsContent.classList.add("active");
     keyStatusContent.classList.remove("active");
     formContent.classList.remove("active");
+    shortcutsContainer.style.display = "block";
   });
 
   let comboState = "press";

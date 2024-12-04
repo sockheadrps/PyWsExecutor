@@ -1,3 +1,6 @@
 __pycache__/
 *.mp3
 .env
+.venv
+
+uploads/

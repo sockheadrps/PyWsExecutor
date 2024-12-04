@@ -1,5 +1,6 @@
-from pydantic import BaseModel, field_validator, model_validator
+from pydantic import BaseModel, field_validator, model_validator, Field
 from typing import List, Union
+import pprint
 
 
 class TTSData(BaseModel):
@@ -14,7 +15,10 @@ class TTSData(BaseModel):
             except ValueError:
                 raise ValueError(f"Invalid volume value: {value}. It must be a number.")
         return value  
-    
+
+
+class Screenshot(BaseModel):
+    pin: str = Field(default="1234")
 
 class PressAction(BaseModel):
     press: str
@@ -43,7 +47,7 @@ class EventData(BaseModel):
 
 class WsEvent(BaseModel):
     event: str
-    data: Union[EventData, TTSData]
+    data: Union[EventData, TTSData, Screenshot]
 
     @model_validator(mode="before")
     def process_combo_actions(cls, values):
@@ -62,8 +66,12 @@ class WsEvent(BaseModel):
 
     @model_validator(mode="before")
     def check_event_value(cls, values):
-        allowed_events = ["keypress", "tts"]
+        allowed_events = ["keypress", "tts", "screenshot"]
         event = values.get("event")
         if event not in allowed_events:
             raise ValueError(f"Invalid event: {event}. Allowed events are {allowed_events}")
         return values
+
+
+if __name__ == "__main__":
+    pprint.pprint(WsEvent.model_json_schema())

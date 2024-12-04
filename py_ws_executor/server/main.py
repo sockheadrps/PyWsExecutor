@@ -1,4 +1,4 @@
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, UploadFile, File, Form
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -7,15 +7,19 @@ from fastapi import Request
 from pydantic import BaseModel
 import json
 import uvicorn
+import os
 
 
 app = FastAPI()
 
 active_connections = []
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="py_ws_executor/server/static"), name="static")
 
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory="py_ws_executor/server/templates")
+
+# Security configuration
+UPLOAD_PIN = "1234"  # In production, use environment variables for this
 
 
 class EventRequest(BaseModel):
@@ -83,6 +87,32 @@ async def send_event(request: EventRequest):
         return JSONResponse(content={"status": "Event sent successfully"})
     except Exception as e:
         raise HTTPException(status_code=500, detail="Failed to send event")
+
+
+@app.post("/upload")
+async def upload_file(
+    file: UploadFile = File(...),
+    pin: str = Form(...),
+):
+    if pin != UPLOAD_PIN:
+        raise HTTPException(status_code=403, detail="Invalid PIN")
+        
+    try:
+        upload_dir = "py_ws_executor/server/uploads"
+        os.makedirs(upload_dir, exist_ok=True)
+        
+        file_path = os.path.join(upload_dir, file.filename)
+        with open(file_path, "wb") as buffer:
+            content = await file.read()
+            buffer.write(content)
+        
+        return JSONResponse(content={
+            "status": "success",
+            "message": "File uploaded successfully",
+            "filename": file.filename
+        })
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to upload file: {str(e)}")
 
 
 if __name__ == "__main__":
