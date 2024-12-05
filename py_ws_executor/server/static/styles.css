@@ -60,7 +60,7 @@ label {
   font-weight: bold;
 }
 
-input[type="text"] {
+input[type='text'] {
   width: 90%;
   padding: 10px;
   margin-bottom: 15px;
@@ -73,7 +73,7 @@ input[type="text"] {
   font-weight: bold;
   color: #495057; /* Align text color with the theme */
 }
-form button[type="submit"] {
+form button[type='submit'] {
   padding: 8px 12px;
   font-size: 16px;
   cursor: pointer;
@@ -83,11 +83,11 @@ form button[type="submit"] {
   background-color: #294f77c9;
 }
 
-form button[type="submit"]:hover {
+form button[type='submit']:hover {
   background-color: #0056b3; /* Matches button hover styles */
 }
 
-form button[type="submit"]:active {
+form button[type='submit']:active {
   transform: scale(0.98); /* Matches button active state */
 }
 
@@ -106,8 +106,6 @@ form button[type="submit"]:active {
 }
 
 .key {
-  width: 50px;
-  height: 50px;
   color: rgb(85, 78, 78);
   text-align: center;
   line-height: 50px;
@@ -138,7 +136,7 @@ form button[type="submit"]:active {
 .shiftleft,
 .shiftright,
 .enter {
-  width: 100px;
+  width: 65px;
 }
 
 .ctrlleft,
@@ -148,7 +146,7 @@ form button[type="submit"]:active {
 .altleft,
 .altright,
 .apps {
-  width: 80px;
+  width: 35px;
 }
 
 /* Numpad layout */
@@ -165,15 +163,15 @@ form button[type="submit"]:active {
 
 /* Individual key styles */
 .key {
-  width: 50px;
-  height: 50px;
+  width: 20px;
+  height: 20px;
   color: rgb(85, 78, 78);
   text-align: center;
   line-height: 50px;
   margin: 2px;
   padding: 15px;
   text-align: center;
-  font-size: 12px;
+  font-size: 16px;
   background-color: #ac9a9a;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -212,11 +210,16 @@ form button[type="submit"]:active {
 .key.winleft,
 .key.winright,
 .key.apps {
-  width: 80px;
+  width: 40px;
 }
 
 .key.numpadenter {
   width: 100px;
+}
+
+.keyboard-container {
+  margin: 0px;
+  padding: 20px;
 }
 
 .key.tab,
@@ -393,11 +396,17 @@ form button[type="submit"]:active {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 50%;
   margin-top: 20px;
   margin: auto;
+  padding: 20px;
 }
 
+.keyboard-container {
+  margin-inline-start: auto;
+  flex-basis: fit-content;
+  width: min-content;
+  margin: auto;
+}
 .wraper-container {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.281); /* Add a soft shadow for a card-like effect */
 }
@@ -420,7 +429,11 @@ form button[type="submit"]:active {
   border: 1px solid #0e112560;
   transition: background-color 0.3s, transform 0.2s ease-in-out; /* Smooth background and transform */
 }
-
+.stream-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .tab-button:hover {
   background-color: #0056b3; /* Change color on hover */
   transform: scale(1.05); /* Slight zoom effect */
@@ -462,8 +475,6 @@ form button[type="submit"]:active {
   border-radius: 8px;
 }
 
-
-
 @media screen and (max-width: 600px) {
   /* Adjust the form padding to make it more compact */
   body {
@@ -499,7 +510,7 @@ form button[type="submit"]:active {
     padding: 0;
   }
   /* Inputs and range sliders span full width */
-  input[type="text"] {
+  input[type='text'] {
     width: 100%;
     font-size: 14px; /* Adjust font size of text inputs and range sliders */
   }
@@ -591,8 +602,8 @@ form button[type="submit"]:active {
     font-size: 12px;
   }
 
-  input[type="text"],
-  input[type="range"] {
+  input[type='text'],
+  input[type='range'] {
     width: 90%;
     padding: 8px;
     margin-bottom: 15px;
@@ -683,7 +694,7 @@ form button[type="submit"]:active {
   position: relative;
 }
 
-.range [type="range"] {
+.range [type='range'] {
   appearance: none;
   background: transparent;
   width: 100%;
@@ -693,8 +704,8 @@ form button[type="submit"]:active {
 }
 
 /* Track styles */
-.range [type="range"]::-webkit-slider-runnable-track,
-.range [type="range"]::-moz-range-track {
+.range [type='range']::-webkit-slider-runnable-track,
+.range [type='range']::-moz-range-track {
   background: linear-gradient(
     to left,
     var(--track-color-background) 100%,
@@ -706,28 +717,26 @@ form button[type="submit"]:active {
 }
 
 /* Thumb styles - completely hidden */
-.range [type="range"]::-webkit-slider-thumb,
-.range [type="range"]::-moz-range-thumb,
-.range [type="range"]::-ms-thumb {
+.range [type='range']::-webkit-slider-thumb,
+.range [type='range']::-moz-range-thumb,
+.range [type='range']::-ms-thumb {
   display: none;
 }
 
 /* For better accessibility (focus outline removed) */
-.range [type="range"]:focus {
+.range [type='range']:focus {
   outline: none;
 }
-input[type="range"] {
+input[type='range'] {
   -webkit-appearance: none;
 }
-input[type="range"]::-webkit-slider-thumb {
+input[type='range']::-webkit-slider-thumb {
   -webkit-appearance: none;
   background: rgb(34, 32, 32);
   height: 35px;
   width: 35px;
   border-radius: 50%;
 }
-
-
 
 /* Input Styles */
 #message {
@@ -767,12 +776,11 @@ input[type="range"]::-webkit-slider-thumb {
   align-items: center;
 }
 
-
-.range input[type="range"]:focus {
+.range input[type='range']:focus {
   outline: none;
 }
 
-.range input[type="range"]::-webkit-slider-thumb {
+.range input[type='range']::-webkit-slider-thumb {
   appearance: none;
   width: 0;
   height: 0;
@@ -816,4 +824,26 @@ input[type="range"]::-webkit-slider-thumb {
   width: 2.5ch; /* Space for up to 3 characters */
   text-align: center; /* Center-align the text within the fixed width */
   display: inline-block; /* Ensure it's treated as a block for width control */
+}
+
+.keypress-container {
+  font-size: 4em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#keypresses {
+  font-size: 2em;
+  color: #333;
+  font-family: monospace;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid #ddd;
 }

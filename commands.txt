@@ -1,0 +1,4 @@
+import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8123)
+   python -m pyws_executor.client.main
+   python -m pyws_executor.monitor.main

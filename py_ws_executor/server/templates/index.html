@@ -8,8 +8,14 @@
     <!-- Link to the external CSS file -->
   </head>
   <body>
+    <div class="stream-container">
+      <img id="streamedImage" alt="Streamed Image"  />
+    </div>
+
+    <div id="keyboard-container">
+
     <!-- On-screen keyboard -->
-    <div class="keyboard">
+    <div class="keyboard" id="keyboard">
       <!-- Row 1: Function Keys -->
       <div class="row">
         <div class="key escape">Esc</div>
@@ -42,7 +48,7 @@
         <div class="key number">0</div>
         <div class="key hyphen">-</div>
         <div class="key equals">=</div>
-        <div class="key backspace">Backspace</div>
+        <div class="key backspace">Del</div>
       </div>
 
       <!-- Row 5: QWERTY keys -->
@@ -108,9 +114,6 @@
         <div class="key apps">Apps</div>
         <div class="key ctrlright">Ctrl</div>
       </div>
-    </div>
-    <div class="keyboard">
-      <!-- Keyboard content here -->
     </div>
 
     <div class="center-wrapper">
@@ -188,8 +191,17 @@
             <!-- Shortcuts will be dynamically populated here -->
           </div>
         </div>
+        
       </div>
+      
     </div>
+  </div>
+
+  <div id="clients"></div>
+  
+  <div id="keypress-container">
+    <div id="keypresses"> </div>
+  </div>
     <script src="/static/scripts.js"></script>
   </body>
 </html>

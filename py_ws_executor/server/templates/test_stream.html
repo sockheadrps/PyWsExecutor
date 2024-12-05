@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <style>
+    /* General Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to bottom right, #1f2937, #3b82f6);
+      color: #f9fafb;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      text-align: center;
+      background: linear-gradient(to right, #f43f5e, #22d3ee);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .stream-container {
+      width: 100%;
+      max-width: 1350px;
+      margin: 20px auto;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
+      background-color: #111827;
+    }
+
+    #streamedImage {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: #000;
+    }
+
+    #keypress-container {
+      margin-top: 20px;
+      width: 100%;
+      max-width: 900px;
+      padding: 15px;
+      background: rgba(17, 24, 39, 0.85);
+      border-radius: 10px;
+      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    #keypresses {
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: center;
+      color: #60a5fa;
+    }
+
+    /* Clients Section */
+    #clients {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 15px auto;
+      color: #93c5fd;
+      font-size: 1.2rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      #keypress-container {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Live Desktop Stream and keystrokes over WebSocket</h1>
+  <div id="clients">Connected Clients: 0</div>
+  <div class="stream-container">
+    <img id="streamedImage" alt="Streamed Image" />
+  </div>
+  <div id="keypress-container">
+    <div id="keypresses"></div>
+  </div>
+  <script src="/static/test_stream.js"></script>
+</body>
+</html>
